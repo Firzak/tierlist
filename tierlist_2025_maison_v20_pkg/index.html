@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tier List</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0d11;--panel:#11151c;--panel2:#171c25;--line:#252d3a;--text:#f4f6fb;--muted:#9aa4b7;--accent:#7c5cff;--shadow:0 12px 35px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}body{overflow-x:hidden}body.dragging{cursor:grabbing;user-select:none;-webkit-user-select:none}.pointer-dragging,.pointer-dragging *{user-select:none!important;-webkit-user-select:none!important} body.dragging *{user-select:none;-webkit-user-select:none}
+button,input{font:inherit}button{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:8px 11px;border-radius:8px;cursor:pointer;font-weight:750}button:hover{filter:brightness(1.08)}button:disabled{opacity:.55;cursor:default}.primary{background:var(--accent);border-color:transparent;color:white}.danger{background:#47202a;border-color:#6d303e;color:#ffdbe0}
+header{position:sticky;top:0;z-index:20;background:rgba(11,13,17,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{max-width:1600px;margin:auto;padding:13px 18px;display:flex;align-items:center;gap:14px}.brand{flex:1;min-width:0}.brand h1{margin:0 0 3px;font-size:21px;letter-spacing:-.4px}.brand p{margin:0;color:var(--muted);font-size:12px}.tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.progress{height:4px;background:#1b212b;border-radius:99px;margin-top:8px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+main{max-width:1600px;margin:auto;padding:16px 18px 26px}.topline{display:flex;align-items:center;gap:10px;margin-bottom:12px}.topline input{flex:1;min-width:220px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px 11px;outline:none}.topline input:focus{border-color:#59647a}.status{font-size:12px;color:var(--muted);white-space:nowrap}
+.tiers{display:flex;flex-direction:column;gap:7px}.tier{display:grid;grid-template-columns:78px 1fr;min-height:124px;border:1px solid var(--line);background:var(--panel);border-radius:11px;overflow:hidden}.label{display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:950;color:white}.zone{min-height:122px;padding:8px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:7px;transition:.12s}.zone.over,.pool-zone.over{background:#171d29;outline:2px dashed #56627a;outline-offset:-4px}.empty:after{content:'Déposez les jeux ici';color:#555f72;font-size:12px;align-self:center;margin:auto}
+.pool{margin-top:12px;border:1px solid var(--line);background:var(--panel);border-radius:11px;overflow:hidden}.pool-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);font-size:13px}.pool-head span{color:var(--muted);font-weight:650}.pool-zone{min-height:185px;padding:9px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:7px;transition:.12s}
+.card{width:118px;height:156px;position:relative;overflow:hidden;border-radius:8px;border:1px solid #303949;background:#1b212b;cursor:grab;user-select:none;touch-action:none;box-shadow:0 5px 13px rgba(0,0,0,.18)}.card:active{cursor:grabbing}.card.dragging-card{opacity:.22}.drag-ghost{position:fixed;pointer-events:none;z-index:9999;opacity:.97;transform:rotate(1deg) scale(1.03);box-shadow:0 20px 40px rgba(0,0,0,.42)}.drop-placeholder{width:118px;height:156px;border-radius:8px;border:2px dashed #66728a;background:rgba(102,114,138,.10);box-sizing:border-box;pointer-events:none}.cover{position:absolute;inset:0;background:linear-gradient(145deg,#262d39,#11151c)}.cover img{width:100%;height:100%;object-fit:cover;display:block;-webkit-user-drag:none;user-drag:none;pointer-events:none}.fallback{height:100%;display:flex;align-items:center;justify-content:center;padding:11px;text-align:center;color:#77829a;font-size:12px;font-weight:850}.shade{position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,rgba(3,5,8,.98));z-index:1}.title{position:absolute;left:7px;right:29px;bottom:7px;z-index:2;font-size:11px;font-weight:850;line-height:1.15;text-shadow:0 1px 3px #000}.pending{position:absolute;top:6px;left:6px;z-index:3;font-size:9px;color:#d5dbe7;background:rgba(0,0,0,.5);padding:3px 5px;border-radius:6px}.failed{position:absolute;top:6px;left:6px;z-index:3;font-size:9px;color:#ffd4da;background:#6b2533;padding:3px 5px;border-radius:6px}.trash{position:absolute;top:5px;right:5px;z-index:5;width:25px;height:25px;padding:0;border-radius:7px;background:rgba(5,7,10,.72);border:1px solid rgba(255,255,255,.12);color:#e7edf7;display:flex;align-items:center;justify-content:center;font-size:12px;opacity:.92}.trash:hover{background:#7a2736;color:#fff}.trash:focus-visible{outline:2px solid #fff;outline-offset:1px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}.modal-backdrop.show{display:flex}.modal{width:min(680px,100%);background:var(--panel);border:1px solid var(--line);border-radius:13px;box-shadow:0 20px 80px rgba(0,0,0,.45);padding:18px}.modal h2{margin:0 0 7px;font-size:18px}.modal p{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.5}.code{background:#0a0d12;border:1px solid var(--line);border-radius:9px;padding:11px;overflow:auto;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#dbe1eb}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.hint{margin-top:10px;color:#7e89a0;font-size:11px;line-height:1.45}.check{display:flex;gap:8px;align-items:flex-start;margin-top:12px}.check input{margin-top:2px}
+.toast{position:fixed;right:16px;bottom:16px;z-index:70;background:#171c25;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:10px;padding:10px 12px;color:var(--text);font-size:12px;display:none}.toast.show{display:block}
+@media(max-width:850px){.bar{align-items:flex-start}.brand h1{font-size:18px}.tools button{padding:7px 9px}.topline{flex-wrap:wrap}.status{width:100%;white-space:normal}.tier{grid-template-columns:60px 1fr}.label{font-size:23px}.card{width:96px;height:132px}}
+
+.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.modal-head h2{margin:0 0 4px}.missing-modal{width:min(900px,100%);max-height:min(86vh,900px);overflow:hidden;display:flex;flex-direction:column}.missing-list{overflow:auto;display:flex;flex-direction:column;gap:8px;padding:4px 2px 2px}.missing-item{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);background:#0e1218;border-radius:10px;padding:8px}.missing-thumb{width:42px;height:56px;border-radius:6px;background:#1b212b;display:flex;align-items:center;justify-content:center;color:#657086;font-size:10px;font-weight:850;overflow:hidden}.missing-thumb img{width:100%;height:100%;object-fit:cover}.missing-name{font-size:12px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.missing-sub{font-size:10px;color:var(--muted);margin-top:3px}.cover-repair{display:flex;gap:7px;align-items:center;justify-content:flex-end;flex-wrap:wrap}.cover-url{width:260px;min-width:180px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 9px;outline:none}.cover-url:focus{border-color:#59647a}.drop-cover{border:1px dashed #59647a;border-radius:8px;padding:8px 10px;color:var(--muted);font-size:11px;cursor:pointer;white-space:nowrap}.drop-cover.over{background:#1a2030;border-color:#8b7aff;color:#fff}.missing-empty{padding:24px;text-align:center;color:var(--muted);font-size:13px}.tools button:disabled{opacity:.5}
+@media(max-width:850px){.missing-item{grid-template-columns:42px 1fr}.cover-repair{grid-column:1/-1;justify-content:stretch}.cover-url{flex:1;width:auto}.drop-cover{flex:0 0 auto}}
+.field-label{display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:11px;font-weight:750;margin-top:10px}.field-label span{font-weight:500}.cover-url.full{width:100%;min-width:0}.add-drop{margin-top:10px;min-height:86px;border:1px dashed #59647a;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;color:var(--muted);font-size:12px;cursor:pointer;background:#0e1218}.add-drop:hover,.add-drop.over{border-color:#8b7aff;background:#17162a;color:#fff}.add-preview{margin-top:10px;width:84px;height:112px;border-radius:8px;border:1px solid var(--line);overflow:hidden;background:#151a23;display:flex;align-items:center;justify-content:center;color:#657086;font-size:9px;font-weight:850;letter-spacing:.5px}.add-preview img{width:100%;height:100%;object-fit:cover}.add-more{width:118px;height:156px;flex:0 0 118px;border:1px dashed #59647a;border-radius:8px;background:#0e1218;color:#8e99ad;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer}.add-more:hover{border-color:#9b8cff;background:#15132a;color:#fff}.add-more .plus{font-size:30px;line-height:1;font-weight:300}.add-more .add-label{font-size:10px;font-weight:800}.pool-zone .add-more{order:9999}.empty-state{min-height:58vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px dashed var(--line);background:var(--panel);border-radius:14px;padding:42px 22px}.empty-icon{width:68px;height:68px;border-radius:16px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#8792a8;font-size:34px;margin-bottom:16px;background:#0e1218}.empty-state h2{margin:0 0 7px;font-size:22px}.empty-state p{margin:0 0 18px;color:var(--muted);font-size:13px}.empty-state button{padding:10px 15px}
+
+
+</style>
+</head>
+<body>
+<header><div class="bar"><div class="brand"><h1>Tier List</h1><p id="subtitle">Importez une liste de jeux pour commencer.</p><div class="progress"><i id="progress"></i></div></div><div class="tools"><button class="primary" id="importBtn">Importer une tier list</button><button id="retryCovers" disabled title="Relancer la recherche uniquement pour les cartes sans jaquette">↻ Rechercher les jaquettes manquantes</button><button id="missingBtn" disabled>Jaquettes manquantes</button><input id="fileInput" type="file" accept=".csv,text/csv" hidden></div></div></header>
+<main><section class="empty-state" id="emptyState"><h2>Bienvenue sur Tier List</h2><p>Un outil simple pour créer une tier list à partir d’un fichier CSV : jeux, films, livres ou tout autre sujet.</p></section><section id="workspace" hidden><div class="topline"><input id="search" placeholder="Rechercher un jeu…"><div class="status" id="status">0 jeu</div></div><div class="tiers" id="tiers"></div><div class="pool"><div class="pool-head"><strong id="poolTitle">JEUX À CLASSER</strong><span id="poolCount"></span></div><div class="pool-zone" id="pool"></div></div></section></main>
+
+<div class="modal-backdrop" id="importModal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="importTitle"><h2 id="importTitle">Importer une tier list</h2><p>Le fichier doit contenir <strong>une seule colonne</strong> nommée <strong>title</strong>. Chaque ligne correspond à un jeu.</p><div class="code">title<br>Clair Obscur: Expedition 33<br>Split Fiction<br>PEAK</div><div class="hint"><strong>Important :</strong> écris le nom exact du jeu, à la majuscule, aux accents, aux espaces, aux tirets et aux signes près. C’est ce nom qui sera utilisé pour rechercher automatiquement la jaquette. Conseil : fais vérifier ta liste par une IA avant l’import afin de corriger les titres et utiliser les noms officiels exacts. Les fichiers CSV séparés par une virgule ou un point-virgule sont acceptés. L’import d’une nouvelle liste remplacera la tier list actuelle.</div><div class="modal-actions"><button id="chooseCsv" class="primary">Choisir le CSV</button><button id="closeImport">Annuler</button></div></div></div>
+<div class="modal-backdrop" id="missingModal"><div class="modal missing-modal" role="dialog" aria-modal="true" aria-labelledby="missingTitle"><div class="modal-head"><div><h2 id="missingTitle">Jaquettes manquantes</h2><p id="missingSummary">Les jeux sans visuel apparaissent ici.</p></div><button id="closeMissing" aria-label="Fermer">✕</button></div><div id="missingList" class="missing-list"></div><div class="modal-actions"><button id="closeMissing2">Fermer</button></div></div></div>
+<div class="modal-backdrop" id="addModal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="addTitle"><div class="modal-head"><div><h2 id="addTitle">Ajouter un jeu</h2><p>Ajoute un jeu oublié à cette tier list. Le titre est obligatoire et une image peut être ajoutée depuis ton PC ou par URL.</p></div><button id="closeAdd" aria-label="Fermer">✕</button></div><label class="field-label">Nom du jeu<input id="addName" class="cover-url full" placeholder="Ex. Hades II"></label><label class="field-label">URL de la jaquette <span>(facultatif)</span><input id="addUrl" class="cover-url full" placeholder="https://…/image.jpg" inputmode="url"></label><div id="addDrop" class="add-drop">Déposer une jaquette ici ou <strong>cliquer pour choisir un fichier</strong><input id="addFile" type="file" accept="image/*" hidden></div><div id="addPreview" class="add-preview"><span>APERÇU</span></div><div class="modal-actions"><button id="cancelAdd">Annuler</button><button id="confirmAdd" class="primary">Ajouter le jeu</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const TIER_DEFS=[['S','#8b5cf6'],['A','#45b85a'],['B','#e1c941'],['C','#f08a24'],['D','#df3f4f']];
+const KEY='tierlist_maker_single_v20';
+const LEGACY_KEYS=['tierlist_maker_single_v19','tierlist_maker_single_v18','tierlist_maker_single_v17','tierlist_maker_single_v16','tierlist_maker_single_v15'];
+const PROXY='https://proxy.cors.dev/';
+const STEAM_SEARCH=(q)=>'https://store.steampowered.com/api/storesearch/?term='+encodeURIComponent(q)+'&l=english&cc=US';
+const IMG_URLS=(id)=>[
+  `https://shared.fastly.steamstatic.com/steam/apps/${id}/library_600x900_2x.jpg`,
+  `https://shared.fastly.steamstatic.com/steam/apps/${id}/library_600x900.jpg`,
+  `https://cdn.cloudflare.steamstatic.com/steam/apps/${id}/library_600x900.jpg`,
+  `https://shared.fastly.steamstatic.com/steam/apps/${id}/header.jpg`
+];
+const SGDB_SEARCH=(q)=>'https://www.steamgriddb.com/search/grids?term='+encodeURIComponent(q);
+const WIKI_API=(q)=>'https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(q+' video game')+'&gsrnamespace=0&prop=pageimages|info&pithumbsize=500&format=json&origin=*';
+let state;
+const IN_PREVIEW=window.self!==window.top;
+function norm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’'"“”®™:+!?.,()\-–—/]/g,' ').replace(/\b(pc|ps5|ps4|xbox|switch|switch 2|console|release|edition|remastered|remaster|hd|port|2025)\b/g,' ').replace(/\s+/g,' ').trim()}
+function tokens(s){return norm(s).split(' ').filter(Boolean)}
+function score(a,b){const A=new Set(tokens(a)),B=new Set(tokens(b));if(!A.size||!B.size)return 0;let hit=0;for(const x of A)if(B.has(x))hit++;const overlap=hit/Math.max(A.size,B.size);const contain=(norm(b).includes(norm(a))||norm(a).includes(norm(b)))?.25:0;return overlap+contain}
+function initials(s){return String(s).split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()}
+function slugId(){return 'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function blankState(){return {games:{},pool:[],tiers:Object.fromEntries(TIER_DEFS.map(x=>[x[0],[]]))}}
+function validState(saved){return !!(saved&&saved.games&&Array.isArray(saved.pool)&&saved.tiers&&TIER_DEFS.every(([t])=>Array.isArray(saved.tiers[t])))}
+function load(){const keys=[KEY,...LEGACY_KEYS];let fallback=null;for(const k of keys){try{const saved=JSON.parse(localStorage.getItem(k)||'null');if(!validState(saved))continue;if(!fallback)fallback=saved;if(Object.keys(saved.games).length)return saved}catch(e){}}return fallback||blankState()}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function removeEverywhere(id){state.pool=state.pool.filter(x=>x!==id);for(const t of Object.keys(state.tiers))state.tiers[t]=(state.tiers[t]||[]).filter(x=>x!==id)}
+function deleteGame(id){const g=state.games[id];if(!g)return;delete state.games[id];removeEverywhere(id);save();render();toast(`${g.name} supprimé de la tier list`)}
+function addMoreCard(){const el=document.createElement('button');el.type='button';el.className='add-more';el.title='Ajouter un jeu';el.innerHTML='<span class="plus">＋</span><span class="add-label">AJOUTER UN JEU</span>';el.addEventListener('click',openAdd);return el}
+function openAdd(){document.getElementById('addModal').classList.add('show');document.getElementById('addName').focus();document.getElementById('addUrl').value='';document.getElementById('addFile').value='';setAddPreview(null)}
+function closeAdd(){document.getElementById('addModal').classList.remove('show')}
+function setAddPreview(src){const box=document.getElementById('addPreview');box.innerHTML=src?`<img src="${esc(src)}" alt="">`:'<span>APERÇU</span>'}
+function addGame(){const name=document.getElementById('addName').value.trim();if(!name){toast('Indique le nom du jeu.');document.getElementById('addName').focus();return}const url=document.getElementById('addUrl').value.trim();const file=document.getElementById('addFile').files?.[0];const id=slugId();state.games[id]={id,name,genre:'',kind:'game',appid:null,steamName:null,cover:null,coverSource:null,failed:false};state.pool.push(id);if(file){if(!file.type.startsWith('image/')){toast('Le fichier doit être une image.');delete state.games[id];removeEverywhere(id);return}fileToDataURL(file).then(data=>{state.games[id].cover=data;state.games[id].coverSource='Import local';save();closeAdd();render();toast(`${name} ajouté`)}).catch(()=>toast('Impossible de lire l’image.'));return}if(url){if(!/^https?:\/\//i.test(url)){toast('L’URL doit commencer par http:// ou https://');delete state.games[id];removeEverywhere(id);return}state.games[id].cover=url;state.games[id].coverSource='URL'}save();closeAdd();render();toast(`${name} ajouté`);if(!url)setTimeout(()=>fetchCover(id).then(()=>{save();render()}),50)}
+function card(id){
+  const g=state.games[id];const el=document.createElement('div');el.className='card';el.dataset.id=id;
+  el.innerHTML=`<div class="cover"><div class="fallback">${esc(initials(g.name))}</div></div><div class="shade"></div><div class="title">${esc(g.steamName||g.name)}</div><button class="trash" title="Supprimer ce jeu" aria-label="Supprimer ce jeu">🗑</button>`;
+  const trash=el.querySelector('.trash');
+  trash.addEventListener('pointerdown',e=>e.stopPropagation());
+  trash.addEventListener('click',e=>{e.stopPropagation();deleteGame(id)});
+  if(g.cover && !IN_PREVIEW){
+    const img=document.createElement('img');img.alt='';img.loading='lazy';img.draggable=false;img.src=g.cover;
+    img.onerror=()=>{g._imgTry=(g._imgTry||0)+1;const urls=g.appid?IMG_URLS(g.appid):[];if(g._imgTry<urls.length)img.src=urls[g._imgTry];else{g.cover=null;g.coverSource=null;g.failed=true;save();render()}};
+    el.querySelector('.cover').innerHTML='';el.querySelector('.cover').appendChild(img);
+  } else if(g.failed) el.insertAdjacentHTML('beforeend','<div class="failed">non trouvé</div>');
+  else if(!g.cover) el.insertAdjacentHTML('beforeend','<div class="pending">recherche…</div>');
+  el.addEventListener('dragstart',e=>e.preventDefault());
+  el.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('.trash'))return;beginPointerDrag(e,el,id)});
+  return el;
+}
+let pointerDrag=null;
+function beginPointerDrag(e,el,id){
+  if(pointerDrag)return;
+  const r=el.getBoundingClientRect();
+  pointerDrag={id,el,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-r.left,offsetY:e.clientY-r.top,active:false,ghost:null,placeholder:null,zone:null,lastX:e.clientX,lastY:e.clientY};
+  try{el.setPointerCapture(e.pointerId)}catch(_){ }
+  e.preventDefault();window.getSelection?.()?.removeAllRanges();
+}
+function activatePointerDrag(d){
+  d.active=true;
+  const ghost=d.el.cloneNode(true);
+  ghost.classList.remove('dragging-card');
+  ghost.classList.add('drag-ghost');
+  ghost.style.width=d.el.offsetWidth+'px';
+  ghost.style.height=d.el.offsetHeight+'px';
+  ghost.style.visibility='visible';
+  ghost.style.display='block';
+  document.body.appendChild(ghost);
+  d.ghost=ghost;
+  d.el.classList.add('dragging-card');
+  d.el.style.visibility='hidden';
+  d.placeholder=document.createElement('div');
+  d.placeholder.className='drop-placeholder';
+  document.body.classList.add('pointer-dragging');
+  updatePointerDragPosition(d.lastX,d.lastY);
+  updatePointerDropTarget(d.lastX,d.lastY);
+}
+function updatePointerDragPosition(x,y){
+  const d=pointerDrag;if(!d?.active||!d.ghost)return;
+  d.lastX=x;d.lastY=y;
+  d.ghost.style.left=Math.round(x-d.offsetX)+'px';
+  d.ghost.style.top=Math.round(y-d.offsetY)+'px';
+}
+function getPointerZone(x,y){
+  const ghost=pointerDrag?.ghost;
+  if(ghost)ghost.style.display='none';
+  const hit=document.elementFromPoint(x,y);
+  if(ghost)ghost.style.display='block';
+  return hit?.closest('.zone,.pool-zone')||null;
+}
+function updatePointerDropTarget(x,y){
+  const d=pointerDrag;if(!d?.active)return;
+  const z=getPointerZone(x,y);
+  document.querySelectorAll('.zone.over,.pool-zone.over').forEach(el=>{if(el!==z)el.classList.remove('over')});
+  if(!z){d.zone=null;if(d.placeholder?.parentNode)d.placeholder.remove();return}
+  d.zone=z;z.classList.add('over');
+  placePointerPlaceholder(z,x,y,d.placeholder,d.id);
+}
+function placePointerPlaceholder(zone,x,y,ph,id){
+  if(ph.parentNode!==zone)zone.appendChild(ph);
+  const cards=[...zone.querySelectorAll('.card')].filter(c=>c.dataset.id!==id);
+  if(!cards.length){zone.appendChild(ph);return}
+  const rows=[];
+  for(const c of cards){
+    const r=c.getBoundingClientRect();
+    let row=rows.find(row=>Math.abs(row.top-r.top)<Math.max(8,r.height*0.18));
+    if(!row){row={top:r.top,bottom:r.bottom,cards:[]};rows.push(row)}
+    row.top=Math.min(row.top,r.top);row.bottom=Math.max(row.bottom,r.bottom);row.cards.push({el:c,r});
+  }
+  rows.sort((a,b)=>a.top-b.top);
+  let row=rows[0];
+  const containing=rows.find(r=>y>=r.top-8&&y<=r.bottom+8);
+  if(containing)row=containing;
+  else if(y>rows[rows.length-1].bottom)row=rows[rows.length-1];
+  else if(y<rows[0].top)row=rows[0];
+  else{
+    row=rows.reduce((best,r)=>Math.abs(((r.top+r.bottom)/2)-y)<Math.abs(((best.top+best.bottom)/2)-y)?r:best,rows[0]);
+  }
+  row.cards.sort((a,b)=>a.r.left-b.r.left);
+  let before=null;
+  for(const item of row.cards){
+    const cx=item.r.left+item.r.width/2;
+    if(x<cx){before=item.el;break}
+  }
+  if(before)zone.insertBefore(ph,before);
+  else{
+    const last=row.cards[row.cards.length-1].el;
+    last.after(ph);
+  }
+}
+function onPointerMove(e){
+  const d=pointerDrag;if(!d||e.pointerId!==d.pointerId)return;d.lastX=e.clientX;d.lastY=e.clientY;
+  if(!d.active&&Math.hypot(e.clientX-d.startX,e.clientY-d.startY)<5)return;
+  if(!d.active)activatePointerDrag(d);e.preventDefault();updatePointerDragPosition(e.clientX,e.clientY);updatePointerDropTarget(e.clientX,e.clientY);updateAutoScroll(e.clientY);
+}
+function finishPointerDrag(cancel=false){
+  const d=pointerDrag;if(!d)return;stopAutoScroll();document.body.classList.remove('pointer-dragging');document.querySelectorAll('.zone.over,.pool-zone.over').forEach(el=>el.classList.remove('over'));
+  if(d.placeholder?.parentNode)d.placeholder.remove();if(d.ghost?.parentNode)d.ghost.remove();d.el.classList.remove('dragging-card');d.el.style.visibility='';
+  if(!cancel&&d.active&&d.zone){
+    const z=d.zone;
+    const ids=[...z.querySelectorAll('.card')].map(c=>c.dataset.id).filter(id=>id!==d.id);
+    const phIndex=d.placeholder?.parentNode===z ? [...z.children].indexOf(d.placeholder) : ids.length;
+    const index=Math.max(0,Math.min(phIndex,ids.length));
+    removeEverywhere(d.id);
+    if(z.id==='pool')state.pool.splice(Math.min(index,state.pool.length),0,d.id);
+    else state.tiers[z.dataset.tier].splice(Math.min(index,state.tiers[z.dataset.tier].length),0,d.id);
+    save();render();
+  }
+  pointerDrag=null;
+}
+function onPointerUp(e){if(pointerDrag&&e.pointerId===pointerDrag.pointerId){try{pointerDrag.el.releasePointerCapture(e.pointerId)}catch(_){ }finishPointerDrag(false)}}
+function cancelPointerDrag(){if(pointerDrag)finishPointerDrag(true)}
+document.addEventListener('pointermove',onPointerMove,{passive:false});document.addEventListener('pointerup',onPointerUp,{passive:false});document.addEventListener('pointercancel',cancelPointerDrag,{passive:false});window.addEventListener('blur',cancelPointerDrag);
+
+let autoScrollY=0,autoScrollRaf=0;
+function autoScrollLoop(){
+  if(!autoScrollY){autoScrollRaf=0;return}
+  window.scrollBy(0,autoScrollY);
+  autoScrollRaf=requestAnimationFrame(autoScrollLoop);
+}
+function startAutoScroll(){if(!autoScrollRaf)autoScrollRaf=requestAnimationFrame(autoScrollLoop)}
+function stopAutoScroll(){autoScrollY=0;if(autoScrollRaf){cancelAnimationFrame(autoScrollRaf);autoScrollRaf=0}}
+function updateAutoScroll(y){
+  const h=window.innerHeight, edge=Math.min(150,Math.max(90,h*0.18));
+  if(y<edge){
+    const strength=1-Math.max(0,y)/edge;
+    autoScrollY=-Math.round(4+18*strength*strength);
+    startAutoScroll();
+  }else if(y>h-edge){
+    const strength=1-Math.max(0,h-y)/edge;
+    autoScrollY=Math.round(4+18*strength*strength);
+    startAutoScroll();
+  }else stopAutoScroll();
+}
+
+function render(){const hasGames=Object.keys(state.games).length>0;document.getElementById('emptyState').hidden=hasGames;document.getElementById('workspace').hidden=!hasGames;if(!hasGames){updateCounts();return}document.getElementById('tiers').innerHTML='';for(const [label,color] of TIER_DEFS){const row=document.createElement('div');row.className='tier';row.innerHTML=`<div class="label" style="background:${color}">${label}</div><div class="zone" data-tier="${label}"></div>`;document.getElementById('tiers').appendChild(row);const z=row.querySelector('.zone');(state.tiers[label]||[]).forEach(id=>state.games[id]&&z.appendChild(card(id)))}const p=document.getElementById('pool');p.innerHTML='';state.pool.forEach(id=>state.games[id]&&p.appendChild(card(id)));p.appendChild(addMoreCard());for(const z of document.querySelectorAll('.zone,.pool-zone'))z.classList.toggle('empty',z.querySelector('.card,.drop-placeholder')===null);updateCounts();filter()}
+function updateCounts(){const total=Object.keys(state.games).length;const have=Object.values(state.games).filter(g=>g.cover).length;const placed=Object.values(state.tiers).reduce((a,b)=>a+b.length,0);document.getElementById('poolCount').textContent=total?`${state.pool.length} à classer • ${placed} classés • ${have}/${total} jaquettes`:'';document.getElementById('subtitle').textContent=total?`${total} jeux • glisser-déposer pour classer`:'Importez une liste de jeux pour commencer.';document.getElementById('retryCovers').disabled=!total;const progress=document.getElementById('progress')?.parentElement;if(progress)progress.style.display=total?'block':'none';updateMissingButton()}
+function updateCounts(){const total=Object.keys(state.games).length;const have=Object.values(state.games).filter(g=>g.cover).length;const missing=Math.max(0,total-have);const placed=Object.values(state.tiers).reduce((a,b)=>a+b.length,0);document.getElementById('poolCount').textContent=`${state.pool.length} à classer • ${placed} classés • ${have}/${total} jaquettes`;document.getElementById('subtitle').textContent=`${total} jeux • glisser-déposer pour classer • suppression par carte`;const retry=document.getElementById('retryCovers');if(retry)retry.disabled=!missing;updateMissingButton()}
+function filter(){const q=norm(document.getElementById('search').value);document.querySelectorAll('.card').forEach(el=>{const g=state.games[el.dataset.id];el.style.display=!q||norm(g.steamName||g.name).includes(q)?'flex':'none'})}
+async function getJSON(url){const res=await fetch(PROXY+url,{credentials:'omit'});if(!res.ok)throw new Error('HTTP '+res.status);return res.json()}
+function imgExists(url){return new Promise(resolve=>{const im=new Image();im.onload=()=>resolve(true);im.onerror=()=>resolve(false);im.src=url})}
+async function searchSteam(name){const queries=[name,norm(name),norm(name).replace(/\bthe\b/g,'').replace(/\s+/g,' ').trim()];for(const q of [...new Set(queries.filter(Boolean))]){try{const data=await getJSON(STEAM_SEARCH(q));const items=(data&&data.items)||[];let best=null,bestScore=0;for(const it of items){if(it.type!=='app')continue;const sc=score(name,it.name);if(sc>bestScore){bestScore=sc;best=it}}if(best&&bestScore>=0.55)return best}catch(e){}}return null}
+async function sgdbFallback(name){try{const res=await fetch(PROXY+SGDB_SEARCH(name),{credentials:'omit'});if(!res.ok)return null;const html=await res.text();const urls=[...html.matchAll(/https:\/\/cdn2\.steamgriddb\.com\/grid\/[^"' )]+/g)].map(m=>m[0].replace(/&amp;/g,'&'));return urls[0]||null}catch(e){return null}}
+async function wikiFallback(name){try{const data=await getJSON(WIKI_API(name));const pages=data&&data.query&&data.query.pages?Object.values(data.query.pages):[];let best=null;for(const p of pages){if(p.thumbnail&&p.thumbnail.source){const sc=score(name,p.title||'');if(!best||sc>best.score)best={url:p.thumbnail.source,score:sc,title:p.title}}}return best&&best.score>=0.35?best:null}catch(e){return null}}
+async function findCover(name){const item=await searchSteam(name);if(item){for(const u of IMG_URLS(item.id)){if(await imgExists(u))return {url:u,appid:item.id,steamName:item.name,source:'Steam'}}}const sg=await sgdbFallback(name);if(sg)return {url:sg,appid:null,steamName:null,source:'SteamGridDB'};const wiki=await wikiFallback(name);if(wiki)return {url:wiki.url,appid:null,steamName:wiki.title,source:'Wikipedia'};return null}
+async function fetchCover(id){const g=state.games[id];if(!g||g.cover)return true;g.failed=false;try{const found=await findCover(g.name);if(found){g.cover=found.url;g.appid=found.appid;g.steamName=found.steamName;g.coverSource=found.source;save();return true}}catch(e){}g.failed=true;save();return false}
+async function runCovers(){if(IN_PREVIEW){toast('Les jaquettes se chargent quand le fichier est ouvert directement dans Chrome/Edge.');return}const ids=Object.keys(state.games).filter(id=>!state.games[id].cover);if(!ids.length){updateCoverStatus();return}document.getElementById('status').textContent='Recherche des jaquettes…';document.getElementById('progress').style.width='2%';for(let i=0;i<ids.length;i+=3){await Promise.all(ids.slice(i,i+3).map(fetchCover));const have=Object.values(state.games).filter(g=>g.cover).length;document.getElementById('progress').style.width=(have/Object.keys(state.games).length*100)+'%';document.getElementById('status').textContent=`Jaquettes : ${have}/${Object.keys(state.games).length}`;render();await new Promise(r=>setTimeout(r,40))}updateCoverStatus()}
+function updateCoverStatus(){const total=Object.keys(state.games).length;const have=Object.values(state.games).filter(g=>g.cover).length;document.getElementById('progress').style.width=(total?have/total*100:0)+'%';document.getElementById('status').textContent=have===total?`✓ ${have} jaquettes`:`${have}/${total} jaquettes • ${total-have} manquantes`;updateMissingButton()}
+function updateMissingButton(){const btn=document.getElementById('missingBtn');if(!btn)return;const total=Object.keys(state.games).length;const missing=Object.values(state.games).filter(g=>!g.cover).length;btn.textContent=missing?`Jaquettes manquantes (${missing})`:'Jaquettes manquantes';btn.disabled=!total||!missing}
+async function setCoverFromUrl(id,url){url=String(url||'').trim();if(!url)return false;if(IN_PREVIEW){toast('Les jaquettes personnalisées peuvent être ajoutées quand le fichier est ouvert directement.');return false}if(!/^https?:\/\//i.test(url)){toast('L’URL doit commencer par http:// ou https://');return false}const ok=await imgExists(url);if(!ok){toast('Cette URL ne renvoie pas une image accessible.');return false}const g=state.games[id];if(!g)return false;g.cover=url;g.coverSource='URL';g.failed=false;g._imgTry=0;save();render();toast(`Jaquette ajoutée pour ${g.name}`);return true}
+function fileToDataURL(file){return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=reject;fr.readAsDataURL(file)})}
+async function setCoverFromFile(id,file){if(!file||!file.type.startsWith('image/')){toast('Choisis une image (JPG, PNG, WEBP…).');return false}if(IN_PREVIEW){toast('Les jaquettes personnalisées peuvent être ajoutées quand le fichier est ouvert directement.');return false}try{const data=await fileToDataURL(file);const g=state.games[id];if(!g)return false;g.cover=data;g.coverSource='Import local';g.failed=false;g._imgTry=0;save();render();toast(`Jaquette importée pour ${g.name}`);return true}catch(e){toast('Impossible de lire cette image.');return false}}
+function openMissing(){renderMissing();document.getElementById('missingModal').classList.add('show')}
+function closeMissing(){document.getElementById('missingModal').classList.remove('show')}
+function renderMissing(){const list=document.getElementById('missingList');const missing=Object.entries(state.games).filter(([,g])=>!g.cover);document.getElementById('missingSummary').textContent=missing.length?`${missing.length} jeu${missing.length>1?'x':''} sans jaquette. Colle une URL d’image ou dépose un fichier pour réparer chaque carte.`:'Toutes les cartes ont une jaquette.';list.innerHTML='';if(!missing.length){list.innerHTML='<div class="missing-empty">Aucune jaquette manquante 🎉</div>';return}for(const [id,g] of missing){const item=document.createElement('div');item.className='missing-item';item.innerHTML=`<div class="missing-thumb">${esc(initials(g.name))}</div><div><div class="missing-name" title="${esc(g.name)}">${esc(g.name)}</div><div class="missing-sub">${esc(g.coverSource||'Aucune source trouvée')}</div></div><div class="cover-repair"><input class="cover-url" placeholder="https://…/image.jpg" inputmode="url"><button class="primary apply-url">Ajouter</button><label class="drop-cover">📁 Déposer / choisir<input type="file" accept="image/*" hidden></label></div>`;const url=item.querySelector('.cover-url');const apply=item.querySelector('.apply-url');const drop=item.querySelector('.drop-cover');const file=item.querySelector('input[type=file]');apply.addEventListener('click',async()=>{if(await setCoverFromUrl(id,url.value))renderMissing()});url.addEventListener('keydown',async e=>{if(e.key==='Enter'){e.preventDefault();if(await setCoverFromUrl(id,url.value))renderMissing()}});drop.addEventListener('click',e=>{if(e.target!==file)file.click()});file.addEventListener('change',async e=>{if(await setCoverFromFile(id,e.target.files?.[0]))renderMissing()});['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));drop.addEventListener('drop',async e=>{const f=e.dataTransfer.files?.[0];if(await setCoverFromFile(id,f))renderMissing()});list.appendChild(item)}}
+function rebuildFromRows(rows){const games={};const pool=[];const tiers=Object.fromEntries(TIER_DEFS.map(x=>[x[0],[]]));let index=0;const seen=new Set();for(const row of rows){const name=String(row.title||'').trim();if(!name)continue;const key=norm(name);if(seen.has(key))continue;seen.add(key);const id=slugId()+index++;games[id]={id,name,genre:'',kind:'game',appid:null,steamName:null,cover:null,coverSource:null,failed:false};pool.push(id)}return {games,pool,tiers}}
+function parseCSV(text){text=text.replace(/^\uFEFF/,'');const first=text.split(/\r?\n/,1)[0]||'';const semi=(first.match(/;/g)||[]).length;const comma=(first.match(/,/g)||[]).length;const delim=semi>comma?';':',';const rows=[];let row=[],cell='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(c==='"'){if(quoted&&n==='"'){cell+='"';i++}else quoted=!quoted}else if(c===delim&&!quoted){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&n==='\n')i++;row.push(cell);cell='';if(row.some(x=>String(x).trim()!==''))rows.push(row);row=[]}else cell+=c}if(cell!==''||row.length){row.push(cell);if(row.some(x=>String(x).trim()!==''))rows.push(row)}if(rows.length<2)throw new Error('Le fichier ne contient aucune ligne de jeu.');const headers=rows[0].map(h=>String(h).trim().toLowerCase());const titleIndex=headers.indexOf('title');if(titleIndex===-1)throw new Error('La première ligne doit contenir une colonne "title".');return rows.slice(1).map(r=>({title:r[titleIndex]??''})).filter(r=>String(r.title).trim()!=='')}
+function importCSV(text){const rows=parseCSV(text);const next=rebuildFromRows(rows);if(!Object.keys(next.games).length)throw new Error('Aucun titre de jeu trouvé.');if(Object.keys(state.games).length&&!confirm('Importer cette liste remplacera la tier list actuelle. Continuer ?'))return false;state=next;save();render();toast(`${Object.keys(next.games).length} jeux importés`);if(!IN_PREVIEW)setTimeout(runCovers,80);return true}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove('show'),2500)}
+state=load();render();
+document.getElementById('search').addEventListener('input',filter);
+const modal=document.getElementById('importModal');const fileInput=document.getElementById('fileInput');
+document.getElementById('importBtn').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();modal.classList.add('show');});
+document.getElementById('closeImport').addEventListener('click',()=>modal.classList.remove('show'));
+document.getElementById('chooseCsv').addEventListener('click',()=>fileInput.click());
+
+document.getElementById('closeAdd').addEventListener('click',closeAdd);document.getElementById('cancelAdd').addEventListener('click',closeAdd);document.getElementById('confirmAdd').addEventListener('click',addGame);document.getElementById('addModal').addEventListener('click',e=>{if(e.target.id==='addModal')closeAdd()});const addDrop=document.getElementById('addDrop');const addFile=document.getElementById('addFile');addDrop.addEventListener('click',e=>{if(e.target!==addFile)addFile.click()});addFile.addEventListener('change',e=>{const f=e.target.files?.[0];if(f&&f.type.startsWith('image/'))fileToDataURL(f).then(setAddPreview)});['dragover','dragenter'].forEach(ev=>addDrop.addEventListener(ev,e=>{e.preventDefault();addDrop.classList.add('over')}));['dragleave','drop'].forEach(ev=>addDrop.addEventListener(ev,e=>{e.preventDefault();addDrop.classList.remove('over')}));addDrop.addEventListener('drop',e=>{const f=e.dataTransfer.files?.[0];if(f&&f.type.startsWith('image/')){const dt=new DataTransfer();dt.items.add(f);addFile.files=dt.files;fileToDataURL(f).then(setAddPreview)}});document.getElementById('addUrl').addEventListener('input',e=>{if(e.target.value.trim())setAddPreview(e.target.value.trim())});
+document.getElementById('retryCovers').addEventListener('click',runCovers);
+document.getElementById('missingBtn').addEventListener('click',openMissing);
+document.getElementById('closeMissing').addEventListener('click',closeMissing);
+document.getElementById('closeMissing2').addEventListener('click',closeMissing);
+fileInput.addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(importCSV(await f.text()))modal.classList.remove('show');fileInput.value=''}catch(err){alert(err.message||'Impossible d’importer ce CSV.');fileInput.value=''}});
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('show')});
+document.getElementById('missingModal').addEventListener('click',e=>{if(e.target.id==='missingModal')closeMissing()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdd();closeMissing();modal.classList.remove('show')} });
+if(IN_PREVIEW){const st=document.getElementById('status');if(st)st.textContent='Preview : recherche de jaquettes désactivée ici.';updateMissingButton()}
+</script>
+</body>
+</html>
