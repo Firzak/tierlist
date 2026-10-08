@@ -14,7 +14,7 @@ function card(id){
     img.onerror=()=>{g._imgTry=(g._imgTry||0)+1;const urls=g.appid?IMG_URLS(g.appid):[];if(g._imgTry<urls.length)img.src=urls[g._imgTry];else{if(!['URL','Import local'].includes(g.coverSource))cacheDelete(g.name,g.type);g.cover=null;g.coverSource=null;g.failed=true;save();render()}};
     el.querySelector('.cover').innerHTML='';el.querySelector('.cover').appendChild(img);
   } else if(g.failed) el.insertAdjacentHTML('beforeend','<div class="failed">non trouvé</div>');
-  else if(!g.cover) el.insertAdjacentHTML('beforeend','<div class="pending">recherche…</div>');
+  else if(!g.cover) el.insertAdjacentHTML('beforeend', g.coverSearching ? '<div class="pending-spinner" aria-label="Recherche de jaquette en cours"><span></span></div>' : '<div class="pending">recherche…</div>');
   el.addEventListener('dragstart',e=>e.preventDefault());
   el.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('.trash'))return;beginPointerDrag(e,el,id)});
   return el;
